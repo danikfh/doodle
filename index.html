@@ -422,8 +422,15 @@ const firebaseConfig = {
       }
     }else if(L)camY+=((L.ty-H*.4)-camY)*(1-Math.pow(.9,dt));
     squash=Math.max(0,squash-.09*dt);
-    const k=1-Math.pow(.72,dt);
-    for(const p of players){if(!p||p.i===me)continue;if(Math.abs(p.tx-p.x)>W/2)p.x=p.tx;else p.x+=(p.tx-p.x)*k;p.y+=(p.ty-p.y)*k}
+    for(const p of players){
+      if(!p || p.i === me) continue;
+      if(Math.abs(p.tx - p.x) > W / 2) {
+        p.x = p.tx;
+      } else {
+        p.x += (p.tx - p.x) * 0.2 * dt;
+      }
+      p.y += (p.ty - p.y) * 0.2 * dt;
+    }
     fill();plats=plats.filter(p=>p.y<camY+H+2500);
   }
 
