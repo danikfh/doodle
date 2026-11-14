@@ -91,7 +91,7 @@ const firebaseConfig = {
     return fbPromise;
   }
 
-  const W=400,H=700,MAX_SCORE_DIFF=1000,COLORS=['#7be495','#ff7eb6','#ffd166','#b79cff'],SEND_MS=60;
+  const W=400,H=700,MAX_SCORE_DIFF=1000,COLORS=['#7be495','#ff7eb6','#ffd166','#b79cff'],SEND_MS=30;
   const $=id=>document.getElementById(id),cv=$('cv'),ctx=cv.getContext('2d'),wrap=$('wrap'),ov=$('ov');
   function fit(){
     const bw=document.body.clientWidth,bh=document.body.clientHeight,pad=bw>=560?24:0,S=Math.min((bw-pad*2)/W,(bh-pad*2)/H);
