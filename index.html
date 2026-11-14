@@ -481,7 +481,7 @@ const firebaseConfig = {
     bg();for(const p of plats)plat(p);
   for(const p of players){
       if(!p||p.i===me||p.dead)continue;const sy=p.y-camY;
-      if(sy>-90&&sy<H+90)alien(p.x, sy + P.h/2 + 10, 1, 1, 1, COLORS[p.i], .45, p.n);
+      if(sy>-90&&sy<H+90)alien(p.x, sy + P.h/2 - 10, 1, 1, 1, COLORS[p.i], .45, p.n);
     }
     if(!dead&&players[me]){
       const s=Math.max(0,Math.min(1,-P.vy/13)),sy=1+.14*s-.3*squash-(P.vy>0?.03:0),sx=1-.08*s+.22*squash;
