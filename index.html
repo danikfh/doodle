@@ -157,14 +157,17 @@ const firebaseConfig = {
   reset(1);
 
   // ---------- save / shop data ----------
-  let save={coins:0,own:{skin:[1,0,0,0],plat:[1,0,0,0],bg:[1,0,0,0],mus:[1,0,0,0]},eq:{skin:0,plat:0,bg:0,mus:0},snd:1};
+  let save={coins:0,own:{skin:[1,0,0,0],plat:[1,0,0,0],bg:[1,0,0,0],mus:[1,0,0,0,0]},eq:{skin:0,plat:0,bg:0,mus:0},snd:1};
   try{const o=JSON.parse(localStorage.getItem('alienJumpSave')||'null');if(o)save={...save,...o,own:{...save.own,...o.own},eq:{...save.eq,...o.eq}}}catch(e){}
   const persist=()=>{try{localStorage.setItem('alienJumpSave',JSON.stringify(save))}catch(e){}};
-  const IT={skin:[['Пришелец',0],['Киборг',150],['Король',300],['Неон',500]],plat:[['Классика',0],['Неон',120],['Лёд',250],['Золото',400]],bg:[['Ночной космос',0],['Закат',150],['Матрица',250],['Туманность',400]],mus:[['Космо-арпеджио',0],['Синтвейв',120],['Чиптюн',250],['Амбиент',350]]};
+  const IT={skin:[['Пришелец',0],['Киборг',150],['Король',300],['Неон',500]],plat:[['Классика',0],['Неон',120],['Лёд',250],['Золото',400]],bg:[['Ночной космос',0],['Закат',150],['Матрица',250],['Туманность',400]],mus:[['Космо-арпеджио',0, null],['Синтвейв',120, null],['Чиптюн',250, null],['Амбиент',350,null],['Династия',50,'track1.mp3']]};
   let tab='skin',prevM=-1;
 
   // ---------- Web Audio ----------
+// ---------- Web Audio ----------
   let AC=null,master,musG,sfxG,mT=null,mCur=-1,mStep=0,mNext=0;
+  let bgmEl=null,bgmSrc='';
+
   function audio(){
     if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)();master=AC.createGain();master.gain.value=save.snd?1:0;master.connect(AC.destination);
       musG=AC.createGain();musG.gain.value=.2;musG.connect(master);sfxG=AC.createGain();sfxG.gain.value=.45;sfxG.connect(master)}catch(e){return null}}
@@ -192,21 +195,7 @@ const firebaseConfig = {
   const TR=[
     {bpm:112,f:(s,t)=>{const C=[[57,60,64],[53,57,60],[48,52,55],[55,59,62]][(s>>4)&3],i=s&15;if(!(i&1))nt(C[(i>>1)%3]+((i>>1)%4===3?12:0),.3,'triangle',.2,t);if(i===0||i===8)nt(C[0]-24,.9,'sine',.4,t)}},
     {bpm:100,f:(s,t)=>{const r=[45,41,48,43][(s>>4)&3],i=s&15,L=[0,-1,7,-1,10,-1,7,-1,12,-1,10,-1,7,-1,3,-1][i];if(!(i&1))nt(r-12,.2,'sawtooth',.14,t);if(!(i&3))nt(36,.14,'sine',.5,t);if(L>=0)nt(r+12+L,.3,'square',.06,t);if(i===4||i===12)noiseAt(t,.1,.08,musG)}},
-    {bpm:150,f:(s,t)=>{const bar=(s>>4)&3,i=s&15,sc=[60,62,64,67,69,72];if(!(i&1))nt(sc[(i*3+bar*2)%6],.13,'square',.08,t);if(!(i&3))nt([48,43,45,41][bar],.2,'triangle',.3,t);if(i&1)noiseAt(t,.03,.04,musG)}},
-    {bpm:64,f:(s,t)=>{const C=[[57,60,64],[53,57,60],[55,59,62],[52,55,59]][(s>>5)&3];if((s&31)===0)C.forEach(n=>nt(n-12,3.8,'sine',.12,t));if(s%5===0)nt(C[(s/5|0)%3]+24,1.2,'sine',.05,t)}}
-  ];
-  function sched(){const tr=TR[mCur];while(mNext<AC.currentTime+.3){tr.f(mStep,mNext);mNext+=15/tr.bpm;mStep++}}
-  function syncMusic(force){
-    const want=prevM>=0?prevM:save.eq.mus;
-    if(!save.snd){clearInterval(mT);mT=null;return}
-    if(!audio())return;
-    if(force||!mT||mCur!==want){clearInterval(mT);mCur=want;mStep=0;mNext=AC.currentTime+.08;mT=setInterval(sched,80)}
-  }
-  function setSnd(init){
-    $('snd').textContent=save.snd?'🔊':'🔇';
-    if(master)master.gain.value=save.snd?1:0;
-    if(!init)syncMusic(true);
-  }
+    {bpm:150,f:(s,t)=>{const bar=(s>>4)&3,i=s&15,sc=[60,62,64,67,69,72];if(!(i&1))nt(sc[(i*3+bar*2)%6],.13,'square',.08,t);if(!(i&3))nt([48,43,45,41][bar],.2,'triangle',.3,t);if(i&
 
   // ---------- shop ----------
   function withCtx(c,fn){const o=ctx;ctx=c;try{fn()}finally{ctx=o}}
