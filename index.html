@@ -158,7 +158,7 @@ const firebaseConfig = {
 
   // ---------- save / shop data ----------
   let save={coins:0,own:{skin:[1,0,0,0],plat:[1,0,0,0],bg:[1,0,0,0],mus:[1,0,0,0,0]},eq:{skin:0,plat:0,bg:0,mus:0},snd:1};
-  try{const o=JSON.parse(localStorage.getItem('alienJumpSave')||'null');if(o)save={...save,...o,own:{...save.own,...o.own},eq:{...save.eq,...o.eq}}}catch(e){}
+  try{const o=JSON.parse(localStorage.getItem('alienJumpSave')||'null');if(o){save={...save,...o,own:{...save.own,...o.own},eq:{...save.eq,...o.eq}};while(save.own.mus.length<IT.mus.length)save.own.mus.push(0)}}catch(e){}
   const persist=()=>{try{localStorage.setItem('alienJumpSave',JSON.stringify(save))}catch(e){}};
   const IT={skin:[['Пришелец',0],['Киборг',150],['Король',300],['Неон',500]],plat:[['Классика',0],['Неон',120],['Лёд',250],['Золото',400]],bg:[['Ночной космос',0],['Закат',150],['Матрица',250],['Туманность',400]],mus:[['Космо-арпеджио',0, null],['Синтвейв',120, null],['Чиптюн',250, null],['Амбиент',350,null],['Династия',50,'track1.mp3']]};
   let tab='skin',prevM=-1;
